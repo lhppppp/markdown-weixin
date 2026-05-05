@@ -12,7 +12,11 @@
     "type": "git",
     "url": "https://github.com/cnych/markdown-weixin.git"
   },
-  "keywords": ["wechat", "markdown", "format"],
+  "keywords": [
+    "wechat",
+    "markdown",
+    "format"
+  ],
   "author": "阳明<icnych@gmail.com>",
   "license": "MIT",
   "bugs": {
