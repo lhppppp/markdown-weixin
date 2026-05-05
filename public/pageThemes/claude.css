@@ -1,0 +1,128 @@
+/* Claude UI Theme — warm, refined, editorial */
+.wrapper {
+  font-size: 15px;
+  color: #3d3929;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+.wrapper > * {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.wrapper p {
+  font-size: 15px;
+  white-space: pre-line;
+  line-height: 32px;
+  color: #3d3929;
+  margin-bottom: 1.2em;
+}
+.wrapper h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #e8e4dc;
+}
+.wrapper h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid #f0ece4;
+}
+.wrapper h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin-top: 1.3em;
+  margin-bottom: 0.4em;
+}
+.wrapper h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #3d3d3d;
+  margin-top: 1.2em;
+  margin-bottom: 0.3em;
+}
+.wrapper a {
+  color: #b45309;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: #d4a574;
+}
+.wrapper a:hover {
+  color: #92400e;
+}
+.wrapper blockquote {
+  border-left: 3px solid #d4a574;
+  background: #faf8f5;
+  color: #5c5647;
+  padding: 12px 16px;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  line-height: 24px;
+}
+.wrapper blockquote p {
+  font-size: 14px;
+  color: #5c5647;
+  margin-bottom: 0;
+}
+.wrapper ul li span,
+.wrapper ol li span {
+  line-height: 26px;
+  font-size: 15px !important;
+}
+.wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+.wrapper table th {
+  background: #f5f2ec;
+  color: #3d3929;
+  font-weight: 600;
+  border: 1px solid #e8e4dc;
+  padding: 8px 12px;
+}
+.wrapper table td {
+  border: 1px solid #e8e4dc;
+  padding: 8px 12px;
+  color: #4a4639;
+}
+.wrapper hr {
+  border: none;
+  border-top: 1px solid #e8e4dc;
+  margin: 2em 0;
+}
+.wrapper code {
+  background: #f5f2ec;
+  color: #b45309;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.wrapper pre {
+  background: #faf8f5;
+  border: 1px solid #e8e4dc;
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+}
+.wrapper pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+.wrapper img {
+  border-radius: 8px;
+  max-width: 100%;
+}
+.wrapper strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
