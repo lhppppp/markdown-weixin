@@ -125,7 +125,7 @@ ol {
 #input {
   width: 50%;
   position: absolute;
-  top: 64px;
+  top: 100px;
   left: 0px;
 }
 textarea {
@@ -142,7 +142,7 @@ textarea {
   background: #333;
   color: #fff;
   position: absolute;
-  top: 64px;
+  top: 100px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -154,7 +154,7 @@ textarea {
 #output {
   position: absolute;
   width: 50%;
-  top: 64px;
+  top: 100px;
   left: 50%;
   right: 0;
   bottom: 0;
@@ -222,16 +222,78 @@ textarea {
   }
 }
 
-@media screen and (max-width:641px) {
-  .topheader ul {
+@media screen and (max-width: 768px) {
+  .topheader {
+    height: auto;
+    min-height: 48px;
+    padding: 8px 12px;
+
+    h1 {
+      font-size: 18px;
+      line-height: 32px;
+    }
+
+    .mobile-menu-toggle {
+      display: block;
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 20;
+    }
+
+    ul {
+      display: none;
+      position: absolute;
+      top: 48px;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      flex-direction: column;
+      padding: 8px 12px;
+      z-index: 15;
+
+      li {
+        float: none;
+        margin: 4px 0;
+      }
+    }
+
+    &.menu-open ul {
+      display: flex;
+    }
+  }
+
+  #input,
+  .editor-toolbar {
+    width: 100%;
+    left: 0;
+  }
+
+  #input {
+    top: 84px;
+  }
+
+  #output {
     display: none;
   }
-  .btn {
-    padding: 2px 15px;
-    font-size: 14px;
-  }
+
   .copy-button {
-    right: 80px;
+    right: 12px;
+    bottom: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .mobile-menu-toggle {
+    display: none;
   }
 }
 
@@ -289,4 +351,73 @@ However, delay the fade out process for 2.5 seconds */
     to {
       bottom: 0; opacity: 0;
     }
+}
+
+// ======== Editor Toolbar ========
+.editor-toolbar {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  width: 50%;
+  height: 36px;
+  background: #2a2a2a;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  z-index: 3;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  button {
+    background: none;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 4px 10px;
+    margin: 0 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover {
+      background: #555;
+      color: #fff;
+    }
+  }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background: #555;
+    margin: 0 6px;
+  }
+
+  .toolbar-clear {
+    margin-left: auto;
+    border-color: #844;
+    color: #e88;
+
+    &:hover {
+      background: #844;
+      color: #fff;
+    }
+  }
+}
+
+// ======== Editor Stats ========
+.editor-stats {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 3;
+  color: #888;
+  font-size: 12px;
+  pointer-events: none;
+
+  .stats-divider {
+    margin: 0 6px;
+    color: #555;
+  }
 }
