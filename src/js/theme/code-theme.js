@@ -1,5 +1,3 @@
-var $ = require("../jquery-3.1.1.js");
-
 var themes = [
   'atelier-cave-dark',
   'atelier-cave-light',
@@ -32,28 +30,29 @@ var themes = [
   'tomorrow',
   'tranquil-heart',
   'vibrant-ink'
-];
-var currentTheme = 'claude';
+]
 
-let CodeTheme = function () {
-  this.init();
-};
+var currentTheme = localStorage.getItem('code-theme') || 'claude'
 
-CodeTheme.prototype.init = function() {
-  this.bindEvt();
-};
+function initCodeTheme() {
+  var select = document.querySelector('.code-theme')
+  if (!select) return
 
-CodeTheme.prototype.bindEvt = function() {
-  var $options = $.map(themes, function(item) {
-    var selected = currentTheme === item ? ' selected' : '';
-    return '<option value="' + item + '"' + selected + '>' + item +'</option>';
-  });
-  $('.code-theme').html($options);
-  $('.code-theme').on('change', function() {
-    var val = $(this).val();
-    $("#codeThemeId").attr('href', './themes/' + val + '.css');
-  }).trigger('change');
-};
+  select.innerHTML = themes
+    .map(function (item) {
+      var selected = currentTheme === item ? ' selected' : ''
+      return '<option value="' + item + '"' + selected + '>' + item + '</option>'
+    })
+    .join('')
 
+  select.addEventListener('change', function () {
+    var val = select.value
+    document.getElementById('codeThemeId').href = './themes/' + val + '.css'
+    localStorage.setItem('code-theme', val)
+  })
 
-module.exports = CodeTheme;
+  // Trigger initial change
+  select.dispatchEvent(new Event('change'))
+}
+
+export default initCodeTheme
