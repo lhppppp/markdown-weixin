@@ -1,4 +1,4 @@
-var showdown = require('../showdown');
+import showdown from '../showdown.cjs';
 
 var converter = new showdown.Converter();
 
