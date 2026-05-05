@@ -1,11 +1,12 @@
 var $ = require("../jquery-3.1.1.js");
 
 var themes = [
+  {'theme': 'claude', 'text': 'Claude 风格'},
   {'theme': 'default-screen', 'text': '适合代码'},
   {'theme': 'narrow-screen', 'text': '窄屏模式'},
   {'theme': 'wide-screen', 'text': '宽屏模式'}
 ];
-var currentTheme = 'wide-screen';
+var currentTheme = 'claude';
 
 let PageTheme = function () {
   this.init();
