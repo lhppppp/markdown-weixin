@@ -1,32 +1,39 @@
-var $ = require("../jquery-3.1.1.js");
-
 var themes = [
-  {'theme': 'claude', 'text': 'Claude 风格'},
-  {'theme': 'default-screen', 'text': '适合代码'},
-  {'theme': 'narrow-screen', 'text': '窄屏模式'},
-  {'theme': 'wide-screen', 'text': '宽屏模式'}
-];
-var currentTheme = 'claude';
+  { theme: 'claude', text: 'Claude 风格' },
+  { theme: 'default-screen', text: '适合代码' },
+  { theme: 'narrow-screen', text: '窄屏模式' },
+  { theme: 'wide-screen', text: '宽屏模式' }
+]
 
-let PageTheme = function () {
-  this.init();
-};
+var currentTheme = localStorage.getItem('page-theme') || 'claude'
 
-PageTheme.prototype.init = function() {
-  this.bindEvt();
-};
+function initPageTheme() {
+  var select = document.querySelector('.page-theme')
+  if (!select) return
 
-PageTheme.prototype.bindEvt = function() {
-  var $options = $.map(themes, function(item) {
-    var selected = currentTheme === item.theme ? ' selected' : '';
-    return '<option value="' + item.theme + '"' + selected + '>' + item.text +'</option>';
-  });
-  $('.page-theme').html($options);
-  $('.page-theme').on('change', function() {
-    var val = $(this).val();
-    $("#pageThemeId").attr('href', './pageThemes/' + val + '.css');
-  }).trigger('change');
-};
+  select.innerHTML = themes
+    .map(function (item) {
+      var selected = currentTheme === item.theme ? ' selected' : ''
+      return (
+        '<option value="' +
+        item.theme +
+        '"' +
+        selected +
+        '>' +
+        item.text +
+        '</option>'
+      )
+    })
+    .join('')
 
+  select.addEventListener('change', function () {
+    var val = select.value
+    document.getElementById('pageThemeId').href = './pageThemes/' + val + '.css'
+    localStorage.setItem('page-theme', val)
+  })
 
-module.exports = PageTheme;
+  // Trigger initial change
+  select.dispatchEvent(new Event('change'))
+}
+
+export default initPageTheme
