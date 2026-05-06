@@ -636,6 +636,51 @@ body {
   }
 }
 
+.drawer-new {
+  position: sticky;
+  bottom: 16px;
+  margin: 24px 24px 0 24px;
+  padding: 13px 16px;
+  background: rgba(254, 252, 248, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px dashed @line;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s @ease, background 0.2s @ease, transform 0.18s @ease;
+
+  .new-sign {
+    font-family: @font-display;
+    font-size: 18px;
+    font-weight: 500;
+    color: @accent;
+    line-height: 1;
+  }
+
+  .new-label {
+    font-family: @font-display;
+    font-style: italic;
+    font-size: 14px;
+    color: @fg-mute;
+    letter-spacing: 0.8px;
+    transition: color 0.2s @ease;
+  }
+
+  &:hover {
+    border-color: @accent-soft;
+    transform: translateY(-1px);
+    .new-label { color: @accent; }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
 .drawer-backdrop {
   position: fixed;
   inset: 0;

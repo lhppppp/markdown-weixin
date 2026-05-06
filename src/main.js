@@ -201,10 +201,7 @@ function bindToolbar() {
 
     var action = btn.dataset.action
     if (action === 'clear') {
-      if (confirm('确定要清空编辑器内容吗？')) {
-        document.getElementById('input').value = ''
-        updateOutput()
-      }
+      deleteCurrent()
       return
     }
 
@@ -318,11 +315,66 @@ function switchDoc(id) {
   drawerSetOpen(false)
 }
 
+function createDoc() {
+  if (!store) return
+  clearTimeout(saveTimer)
+  var current = getActive(store)
+  current.content = document.getElementById('input').value
+  current.updatedAt = Date.now()
+  var doc = newDoc('')
+  store.docs.unshift(doc)
+  store.currentId = doc.id
+  document.getElementById('input').value = ''
+  if (!persist(store)) showSnackbar('保存失败，本地空间已满')
+  updateOutput()
+  renderDocList()
+  drawerSetOpen(false)
+  document.getElementById('input').focus()
+}
+
+function deleteDoc(id) {
+  if (!store) return
+  var idx = -1
+  for (var i = 0; i < store.docs.length; i++) {
+    if (store.docs[i].id === id) { idx = i; break }
+  }
+  if (idx === -1) return
+  var victim = store.docs[idx]
+  var title = extractTitle(victim.content)
+  if (!confirm('删除《' + title + '》？此操作不可撤销。')) return
+
+  store.docs.splice(idx, 1)
+  var wasCurrent = id === store.currentId
+
+  if (store.docs.length === 0) {
+    var doc = newDoc('')
+    store.docs.push(doc)
+    store.currentId = doc.id
+  } else if (wasCurrent) {
+    var nextIdx = idx > 0 ? idx - 1 : 0
+    store.currentId = store.docs[nextIdx].id
+  }
+
+  if (wasCurrent) {
+    document.getElementById('input').value = getActive(store).content
+    document.getElementById('input').scrollTop = 0
+  }
+  if (!persist(store)) showSnackbar('保存失败，本地空间已满')
+  if (wasCurrent) updateOutput()
+  renderDocList()
+}
+
+function deleteCurrent() {
+  if (!store) return
+  deleteDoc(store.currentId)
+}
+
 function bindDrawer() {
   var toggle = document.querySelector('.drawer-toggle')
   var drawer = document.querySelector('.docs-drawer')
   var backdrop = document.querySelector('.drawer-backdrop')
   var list = document.querySelector('.doc-list')
+  var newBtn = document.querySelector('.drawer-new')
 
   function setOpen(open) {
     toggle.classList.toggle('is-open', open)
@@ -336,11 +388,18 @@ function bindDrawer() {
     setOpen(!drawer.classList.contains('is-open'))
   })
   backdrop.addEventListener('click', function () { setOpen(false) })
+  newBtn.addEventListener('click', createDoc)
 
   list.addEventListener('click', function (e) {
     var item = e.target.closest('.doc-item')
     if (!item) return
-    if (e.target.closest('.doc-delete')) return
+    var del = e.target.closest('.doc-delete')
+    if (del) {
+      e.preventDefault()
+      e.stopPropagation()
+      deleteDoc(item.dataset.id)
+      return
+    }
     e.preventDefault()
     switchDoc(item.dataset.id)
   })
