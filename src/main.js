@@ -132,6 +132,7 @@ function formatTime(ts) {
 
 var store = null
 var saveTimer = null
+var drawerSetOpen = function () {}   // placeholder until bindDrawer runs
 
 function getStore() { return store }
 
@@ -161,6 +162,7 @@ function autoSave() {
     if (!persist(store)) {
       showSnackbar('保存失败，本地空间已满')
     }
+    renderDocList()
   }, 500)
 }
 
@@ -274,10 +276,53 @@ function loadDemo() {
     })
 }
 
+function renderDocList() {
+  if (!store) return
+  var list = document.querySelector('.doc-list')
+  var count = document.querySelector('.drawer-count')
+  count.textContent = store.docs.length
+  list.innerHTML = ''
+  for (var i = 0; i < store.docs.length; i++) {
+    var d = store.docs[i]
+    var li = document.createElement('li')
+    var item = document.createElement('a')
+    item.className = 'doc-item' + (d.id === store.currentId ? ' is-active' : '')
+    item.dataset.id = d.id
+    item.innerHTML =
+      '<span class="doc-bookmark" aria-hidden="true"></span>' +
+      '<span class="doc-mark" aria-hidden="true">§</span>' +
+      '<h3 class="doc-title"></h3>' +
+      '<p class="doc-meta"></p>' +
+      '<button class="doc-delete" type="button" aria-label="删除这篇">✕</button>'
+    item.querySelector('.doc-title').textContent = extractTitle(d.content)
+    item.querySelector('.doc-meta').textContent =
+      formatTime(d.updatedAt) + ' · ' + wordCount(d.content).toLocaleString() + ' 字'
+    li.appendChild(item)
+    list.appendChild(li)
+  }
+}
+
+function switchDoc(id) {
+  if (!store || id === store.currentId) return
+  clearTimeout(saveTimer)
+  var current = getActive(store)
+  current.content = document.getElementById('input').value
+  current.updatedAt = Date.now()
+  store.currentId = id
+  var target = getActive(store)
+  document.getElementById('input').value = target.content
+  document.getElementById('input').scrollTop = 0
+  if (!persist(store)) showSnackbar('保存失败，本地空间已满')
+  updateOutput()
+  renderDocList()
+  drawerSetOpen(false)
+}
+
 function bindDrawer() {
   var toggle = document.querySelector('.drawer-toggle')
   var drawer = document.querySelector('.docs-drawer')
   var backdrop = document.querySelector('.drawer-backdrop')
+  var list = document.querySelector('.doc-list')
 
   function setOpen(open) {
     toggle.classList.toggle('is-open', open)
@@ -285,11 +330,20 @@ function bindDrawer() {
     drawer.setAttribute('aria-hidden', open ? 'false' : 'true')
     backdrop.classList.toggle('is-visible', open)
   }
+  drawerSetOpen = setOpen
 
   toggle.addEventListener('click', function () {
     setOpen(!drawer.classList.contains('is-open'))
   })
   backdrop.addEventListener('click', function () { setOpen(false) })
+
+  list.addEventListener('click', function (e) {
+    var item = e.target.closest('.doc-item')
+    if (!item) return
+    if (e.target.closest('.doc-delete')) return
+    e.preventDefault()
+    switchDoc(item.dataset.id)
+  })
 }
 
 function bindEvents() {
@@ -345,6 +399,7 @@ if (loadActiveDoc()) {
   bindEvents()
   bindToolbar()
   bindDrawer()
+  renderDocList()
   updateOutput()
   initCodeTheme()
   initPageTheme()
@@ -364,6 +419,7 @@ if (loadActiveDoc()) {
       bindEvents()
       bindToolbar()
       bindDrawer()
+      renderDocList()
       updateOutput()
       initCodeTheme()
       initPageTheme()
