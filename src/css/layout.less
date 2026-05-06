@@ -442,6 +442,13 @@ body {
     visibility: visible;
     animation: sb-in 0.4s @ease, sb-out 0.4s @ease 2.6s forwards;
   }
+
+  &.is-warning {
+    &::before {
+      content: "⚠";
+      color: @accent;
+    }
+  }
 }
 
 // ============ Drawer Toggle (hamburger) ============

@@ -23,12 +23,15 @@ var converter = new showdown.Converter({
   tables: true
 })
 
-function showSnackbar(text) {
+function showSnackbar(text, variant) {
   var snackbar = document.getElementById('snackbar')
   if (!showSnackbar._default) showSnackbar._default = snackbar.textContent
   snackbar.textContent = text || showSnackbar._default
+  snackbar.classList.remove('is-warning')
+  if (variant === 'warning') snackbar.classList.add('is-warning')
   snackbar.classList.add('show')
-  setTimeout(function () {
+  clearTimeout(showSnackbar._timer)
+  showSnackbar._timer = setTimeout(function () {
     snackbar.classList.remove('show')
   }, 3000)
 }
@@ -139,7 +142,7 @@ function getStore() { return store }
 function setStore(next) {
   store = next
   if (!persist(store)) {
-    showSnackbar('保存失败，本地空间已满')
+    showSnackbar('保存失败，本地空间已满', 'warning')
   }
 }
 
@@ -160,7 +163,7 @@ function autoSave() {
     doc.content = document.getElementById('input').value
     touch(store, doc)
     if (!persist(store)) {
-      showSnackbar('保存失败，本地空间已满')
+      showSnackbar('保存失败，本地空间已满', 'warning')
     }
     renderDocList()
   }, 500)
@@ -267,7 +270,7 @@ function loadDemo() {
       var doc = newDoc(text)
       store = { version: STORE_VERSION, currentId: doc.id, docs: [doc] }
       if (!persist(store)) {
-        showSnackbar('保存失败，本地空间已满')
+        showSnackbar('保存失败，本地空间已满', 'warning')
       }
       document.getElementById('input').value = text
     })
@@ -309,7 +312,7 @@ function switchDoc(id) {
   var target = getActive(store)
   document.getElementById('input').value = target.content
   document.getElementById('input').scrollTop = 0
-  if (!persist(store)) showSnackbar('保存失败，本地空间已满')
+  if (!persist(store)) showSnackbar('保存失败，本地空间已满', 'warning')
   updateOutput()
   renderDocList()
   drawerSetOpen(false)
@@ -325,7 +328,7 @@ function createDoc() {
   store.docs.unshift(doc)
   store.currentId = doc.id
   document.getElementById('input').value = ''
-  if (!persist(store)) showSnackbar('保存失败，本地空间已满')
+  if (!persist(store)) showSnackbar('保存失败，本地空间已满', 'warning')
   updateOutput()
   renderDocList()
   drawerSetOpen(false)
@@ -359,7 +362,7 @@ function deleteDoc(id) {
     document.getElementById('input').value = getActive(store).content
     document.getElementById('input').scrollTop = 0
   }
-  if (!persist(store)) showSnackbar('保存失败，本地空间已满')
+  if (!persist(store)) showSnackbar('保存失败，本地空间已满', 'warning')
   if (wasCurrent) updateOutput()
   renderDocList()
 }
@@ -470,7 +473,7 @@ if (loadActiveDoc()) {
         var doc = newDoc('')
         store = { version: STORE_VERSION, currentId: doc.id, docs: [doc] }
         if (!persist(store)) {
-          showSnackbar('保存失败，本地空间已满')
+          showSnackbar('保存失败，本地空间已满', 'warning')
         }
       }
     })
