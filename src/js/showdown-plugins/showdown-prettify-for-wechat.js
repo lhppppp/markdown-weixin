@@ -1,4 +1,4 @@
-import showdown from '../showdown.cjs'
+import showdown from '../showdown.js'
 
 showdown.extension('prettify', function () {
   return [

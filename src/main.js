@@ -9,8 +9,8 @@ import './js/google-code-prettify/run_prettify.js'
 import initCodeTheme from './js/theme/code-theme.js'
 import initPageTheme from './js/theme/page-theme.js'
 
-import showdown from './js/showdown.cjs'
-import Clipboard from './js/clipboard.min.cjs'
+import showdown from './js/showdown.js'
+import Clipboard from './js/clipboard.min.js'
 
 var params = {}
 var searchParams = new URLSearchParams(window.location.search)

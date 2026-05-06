@@ -2454,6 +2454,4 @@ showdown.subParser('unescapeSpecialChars', function (text) {
   return text;
 });
 
-var root = this;
-
-module.exports = showdown;
+export default showdown;

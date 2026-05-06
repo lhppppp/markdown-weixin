@@ -1,4 +1,4 @@
-import showdown from '../showdown.cjs';
+import showdown from '../showdown.js';
 
 var converter = new showdown.Converter();
 
@@ -21,7 +21,7 @@ showdown.extension('footnote', function () {
   }, {
     type: 'lang',
     filter: function filter(text) {
-      return text.replace(/\[\^([\d\w]+)\]/m, function (str, name) {
+      return text.replace(/\[\^([\d\w]+)\]/gm, function (str, name) {
         return '<a href="#footnote-' + name + '"><sup>[' + name + ']</sup></a>';
       });
     }
