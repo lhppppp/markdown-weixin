@@ -1,71 +1,71 @@
 <!doctype html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=0">
-  <meta name="author" content="https://www.qikqiak.com">
-  <meta name="email" content="icnych@gmail.com">
-  <meta name="keyword" content="markdown,微信,公众帐号,格式,代码">
-  <meta name="description" content="一款简单易用的将Markdown转换为微信公众号内容的格式化工具，主要针对代码做格式化处理。">
-  <title>Markdown转换微信公众号神器</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="将 Markdown 转换为微信公众号内容的格式化工具。">
+  <title>Markdown × Weixin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
+
   <script type="module" src="/src/main.js"></script>
-  <link rel="stylesheet" href="./themes/github.css" id="codeThemeId" />
-  <link rel="stylesheet" id="pageThemeId" />
+  <link rel="stylesheet" href="./themes/github.css" id="codeThemeId">
+  <link rel="stylesheet" id="pageThemeId">
 </head>
 <body>
-<div class="topheader">
-<button class="mobile-menu-toggle" aria-label="Toggle menu">&#9776;</button>
-  <a href="https://md.qikqiak.com"><h1>Markdown-Weixin</h1></a>
-  <ul>
-    <li>
-      <div class="theme-wrapper">
-        <label>页面主题选择：</label><select class="page-theme"></select>
-      </div>
-    </li>
-    <li>
-      <div class="theme-wrapper">
-        <label>代码主题选择：</label><select class="code-theme"></select>
-      </div>
-    </li>
-    <li class="forkbtn"><a href="https://github.com/cnych/markdown-weixin/issues/new" target="_blank">意见反馈</a></li>
-    <li><a href="https://www.qikqiak.com/" target="_blank">关于阳明</a></li>
-    <li><iframe allowtransparency="true" frameborder="0" scrolling="0" width="90px" height="20px" class="github-star" src="https://ghbtns.com/github-btn.html?user=cnych&amp;repo=markdown-weixin&amp;type=watch&amp;count=true&amp;size=middle"></iframe></li>
-  </ul>
-</div>
+<header class="topheader">
+  <button class="mobile-menu-toggle" aria-label="展开菜单">&#9776;</button>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">§</span>
+    <div class="brand-text">
+      <h1 class="brand-title">Markdown<em>×</em>Weixin</h1>
+      <span class="brand-tag">公 众 号 格 式 转 换</span>
+    </div>
+  </div>
+  <nav class="topheader-nav">
+    <label class="theme-wrapper">
+      <span class="theme-label">页面</span>
+      <select class="page-theme"></select>
+    </label>
+    <label class="theme-wrapper">
+      <span class="theme-label">代码</span>
+      <select class="code-theme"></select>
+    </label>
+  </nav>
+</header>
 <div class="editor-toolbar">
-  <button data-action="bold" title="加粗"><b>B</b></button>
-  <button data-action="italic" title="斜体"><i>I</i></button>
+  <button data-action="bold" aria-label="加粗"><strong>B</strong></button>
+  <button data-action="italic" aria-label="斜体"><em>I</em></button>
   <span class="toolbar-divider"></span>
-  <button data-action="h1" title="一级标题">H1</button>
-  <button data-action="h2" title="二级标题">H2</button>
-  <button data-action="h3" title="三级标题">H3</button>
+  <button data-action="h1" aria-label="一级标题">H1</button>
+  <button data-action="h2" aria-label="二级标题">H2</button>
+  <button data-action="h3" aria-label="三级标题">H3</button>
   <span class="toolbar-divider"></span>
-  <button data-action="code" title="行内代码">&lt;/&gt;</button>
-  <button data-action="codeblock" title="代码块">{ }</button>
-  <button data-action="link" title="链接">Link</button>
-  <button data-action="image" title="图片">Img</button>
+  <button data-action="code" aria-label="行内代码">&lt;/&gt;</button>
+  <button data-action="codeblock" aria-label="代码块">{ }</button>
+  <button data-action="link" aria-label="插入链接">Link</button>
+  <button data-action="image" aria-label="插入图片">Img</button>
   <span class="toolbar-divider"></span>
-  <button data-action="quote" title="引用">"</button>
-  <button data-action="ul" title="无序列表">UL</button>
-  <button data-action="ol" title="有序列表">OL</button>
-  <span class="toolbar-divider"></span>
-  <button data-action="clear" title="清空内容" class="toolbar-clear">Clear</button>
+  <button data-action="quote" aria-label="引用">&ldquo;</button>
+  <button data-action="ul" aria-label="无序列表">UL</button>
+  <button data-action="ol" aria-label="有序列表">OL</button>
+  <button data-action="clear" class="toolbar-clear" aria-label="清空内容">✕</button>
 </div>
 <textarea id="input" spellcheck="false"></textarea>
 <div class="editor-stats">
-  <span id="charCount">字数：0</span>
-  <span class="stats-divider">|</span>
-  <span id="lineCount">行数：0</span>
+  <span id="charCount">字数 0</span>
+  <span class="stats-divider">·</span>
+  <span id="lineCount">行数 0</span>
 </div>
-
-<button id="copybtn" data-clipboard-action="copy" data-clipboard-target="#outputCtt" class="btn copy-button">复制</button>
-
+<button id="copybtn" data-clipboard-action="copy" data-clipboard-target="#outputCtt" class="btn copy-button" aria-label="复制到剪贴板">
+  <span class="copy-label">复 制</span>
+</button>
 <div id="output">
   <div class="wrapper" id="outputCtt"></div>
 </div>
-
-<div id="snackbar">复制成功，直接前往微信页面粘贴即可~</div>
-
+<div id="snackbar">已复制到剪贴板，粘贴到微信公众号编辑器即可</div>
 </body>
 </html>

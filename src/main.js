@@ -98,6 +98,7 @@ function bindToolbar() {
     if (!config) return
 
     var input = document.getElementById('input')
+    input.focus()
     var start = input.selectionStart
     var end = input.selectionEnd
     var text = input.value
@@ -105,18 +106,22 @@ function bindToolbar() {
 
     if (config.lineStart) {
       var lineStart = text.lastIndexOf('\n', start - 1) + 1
+      input.setSelectionRange(lineStart, end)
       var insertion = config.before + selected + config.after
-      input.value = text.substring(0, lineStart) + insertion + text.substring(end)
-      input.selectionStart = lineStart + config.before.length
-      input.selectionEnd = lineStart + config.before.length + selected.length
+      document.execCommand('insertText', false, insertion)
+      input.setSelectionRange(
+        lineStart + config.before.length,
+        lineStart + config.before.length + selected.length
+      )
     } else {
       var insertion = config.before + selected + config.after
-      input.value = text.substring(0, start) + insertion + text.substring(end)
-      input.selectionStart = start + config.before.length
-      input.selectionEnd = start + config.before.length + selected.length
+      document.execCommand('insertText', false, insertion)
+      input.setSelectionRange(
+        start + config.before.length,
+        start + config.before.length + selected.length
+      )
     }
 
-    input.focus()
     updateOutput()
     autoSave()
   })
