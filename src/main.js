@@ -92,6 +92,7 @@ function getActive(store) {
   for (var i = 0; i < store.docs.length; i++) {
     if (store.docs[i].id === store.currentId) return store.docs[i]
   }
+  store.currentId = store.docs[0].id
   return store.docs[0]
 }
 
