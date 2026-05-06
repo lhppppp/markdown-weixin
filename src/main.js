@@ -23,15 +23,15 @@ var converter = new showdown.Converter({
   tables: true
 })
 
-function showSnackbar() {
+function showSnackbar(text) {
   var snackbar = document.getElementById('snackbar')
+  if (!showSnackbar._default) showSnackbar._default = snackbar.textContent
+  snackbar.textContent = text || showSnackbar._default
   snackbar.classList.add('show')
   setTimeout(function () {
     snackbar.classList.remove('show')
   }, 3000)
 }
-
-var STORAGE_KEY = 'markdown-content'
 
 // ============ Doc Store ============
 var DOCS_KEY = 'markdown-docs'
@@ -130,23 +130,38 @@ function formatTime(ts) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
 }
 
+var store = null
 var saveTimer = null
+
+function getStore() { return store }
+
+function setStore(next) {
+  store = next
+  if (!persist(store)) {
+    showSnackbar('保存失败，本地空间已满')
+  }
+}
+
+function loadActiveDoc() {
+  store = loadStore() || migrateOldKey()
+  if (store) {
+    document.getElementById('input').value = getActive(store).content
+    return true
+  }
+  return false
+}
 
 function autoSave() {
   clearTimeout(saveTimer)
   saveTimer = setTimeout(function () {
-    var input = document.getElementById('input')
-    localStorage.setItem(STORAGE_KEY, input.value)
+    if (!store) return
+    var doc = getActive(store)
+    doc.content = document.getElementById('input').value
+    touch(store, doc)
+    if (!persist(store)) {
+      showSnackbar('保存失败，本地空间已满')
+    }
   }, 500)
-}
-
-function loadSavedContent() {
-  var saved = localStorage.getItem(STORAGE_KEY)
-  if (saved !== null) {
-    document.getElementById('input').value = saved
-    return true
-  }
-  return false
 }
 
 function updateStats() {
@@ -186,7 +201,6 @@ function bindToolbar() {
     if (action === 'clear') {
       if (confirm('确定要清空编辑器内容吗？')) {
         document.getElementById('input').value = ''
-        localStorage.removeItem(STORAGE_KEY)
         updateOutput()
       }
       return
@@ -251,6 +265,11 @@ function loadDemo() {
       return res.text()
     })
     .then(function (text) {
+      var doc = newDoc(text)
+      store = { version: STORE_VERSION, currentId: doc.id, docs: [doc] }
+      if (!persist(store)) {
+        showSnackbar('保存失败，本地空间已满')
+      }
       document.getElementById('input').value = text
     })
 }
@@ -322,7 +341,7 @@ function bindEvents() {
 }
 
 // Init
-if (loadSavedContent()) {
+if (loadActiveDoc()) {
   bindEvents()
   bindToolbar()
   bindDrawer()
@@ -331,7 +350,16 @@ if (loadSavedContent()) {
   initPageTheme()
 } else {
   loadDemo()
-    .catch(function () {})
+    .catch(function () {
+      // If demo fetch failed and there's still no store, create an empty doc
+      if (!store) {
+        var doc = newDoc('')
+        store = { version: STORE_VERSION, currentId: doc.id, docs: [doc] }
+        if (!persist(store)) {
+          showSnackbar('保存失败，本地空间已满')
+        }
+      }
+    })
     .finally(function () {
       bindEvents()
       bindToolbar()
