@@ -32,6 +32,104 @@ function showSnackbar() {
 }
 
 var STORAGE_KEY = 'markdown-content'
+
+// ============ Doc Store ============
+var DOCS_KEY = 'markdown-docs'
+var OLD_KEY = 'markdown-content'
+var STORE_VERSION = 1
+
+function newId() {
+  return 'doc-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6)
+}
+
+function newDoc(content) {
+  var now = Date.now()
+  return {
+    id: newId(),
+    content: content || '',
+    createdAt: now,
+    updatedAt: now
+  }
+}
+
+function persist(store) {
+  try {
+    localStorage.setItem(DOCS_KEY, JSON.stringify(store))
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+function loadStore() {
+  var raw = localStorage.getItem(DOCS_KEY)
+  if (raw) {
+    try {
+      var parsed = JSON.parse(raw)
+      if (parsed && parsed.version === STORE_VERSION && Array.isArray(parsed.docs) && parsed.docs.length > 0) {
+        return parsed
+      }
+    } catch (e) {}
+  }
+  return null
+}
+
+function migrateOldKey() {
+  var oldContent = localStorage.getItem(OLD_KEY)
+  if (oldContent === null) return null
+  var doc = newDoc(oldContent)
+  var store = { version: STORE_VERSION, currentId: doc.id, docs: [doc] }
+  if (persist(store)) {
+    localStorage.removeItem(OLD_KEY)
+  }
+  return store
+}
+
+function getActive(store) {
+  for (var i = 0; i < store.docs.length; i++) {
+    if (store.docs[i].id === store.currentId) return store.docs[i]
+  }
+  return store.docs[0]
+}
+
+function touch(store, doc) {
+  doc.updatedAt = Date.now()
+  var idx = store.docs.indexOf(doc)
+  if (idx > 0) {
+    store.docs.splice(idx, 1)
+    store.docs.unshift(doc)
+  }
+}
+
+function extractTitle(content) {
+  var h1 = content.match(/^#\s+(.+?)\s*$/m)
+  if (h1) return h1[1].trim()
+  var lines = content.split('\n')
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim()
+    if (line) return line.slice(0, 20)
+  }
+  return '未命名'
+}
+
+function wordCount(content) {
+  return content.replace(/\s/g, '').length
+}
+
+function formatTime(ts) {
+  var d = new Date(ts)
+  var now = new Date()
+  var sameDay = d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate()
+  var yest = new Date(now); yest.setDate(now.getDate() - 1)
+  var isYest = d.getFullYear() === yest.getFullYear() && d.getMonth() === yest.getMonth() && d.getDate() === yest.getDate()
+  function pad(n) { return n < 10 ? '0' + n : '' + n }
+  var hhmm = pad(d.getHours()) + ':' + pad(d.getMinutes())
+  if (sameDay) return '今日 ' + hhmm
+  if (isYest) return '昨天 ' + hhmm
+  if (d.getFullYear() === now.getFullYear()) return pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+}
+
 var saveTimer = null
 
 function autoSave() {
