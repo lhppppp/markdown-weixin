@@ -444,11 +444,123 @@ body {
   }
 }
 
-// ============ Responsive ============
-@media screen and (min-width: 769px) {
-  .mobile-menu-toggle { display: none; }
+// ============ Drawer Toggle (hamburger) ============
+.drawer-toggle {
+  width: 38px;
+  height: 38px;
+  padding: 9px 10px;
+  border: 1px solid @line;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s @ease, border-color 0.2s @ease;
+
+  span {
+    display: block;
+    height: 1.5px;
+    background: @fg-mute;
+    border-radius: 1px;
+    transition: all 0.3s @ease;
+    &:nth-child(1) { width: 16px; }
+    &:nth-child(2) { width: 12px; }
+    &:nth-child(3) { width: 18px; }
+  }
+
+  &:hover {
+    border-color: @accent-soft;
+    background: rgba(255, 255, 255, 0.9);
+    span { background: @accent; }
+  }
+
+  &.is-open {
+    span:nth-child(1) { width: 16px; transform: translateY(5.5px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    span:nth-child(3) { width: 16px; transform: translateY(-5.5px) rotate(-45deg); }
+  }
 }
 
+// ============ Drawer ============
+.docs-drawer {
+  position: fixed;
+  top: 68px;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background:
+    linear-gradient(90deg, rgba(242, 237, 227, 0.55), transparent 40%),
+    @bg-paper;
+  border-right: 1px solid @line;
+  padding: 26px 0 100px 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.36s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.36s @ease;
+  z-index: 12;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &.is-open {
+    transform: translateX(0);
+    box-shadow: 6px 0 40px -18px rgba(44, 42, 39, 0.22);
+  }
+}
+
+.drawer-header {
+  margin: 0 28px;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid @line-soft;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  .drawer-label {
+    font-family: @font-mono;
+    font-size: 10.5px;
+    letter-spacing: 2.8px;
+    color: @fg-whisper;
+    text-transform: uppercase;
+  }
+
+  .drawer-count {
+    font-family: @font-mono;
+    font-size: 10.5px;
+    color: @fg-mute;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.doc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 0 auto;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 42, 39, 0.42);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s @ease;
+  z-index: 11;
+  display: none;
+
+  &.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+// ============ Responsive ============
 @media screen and (max-width: 768px) {
   .topheader {
     height: auto;
@@ -472,21 +584,6 @@ body {
     &.menu-open .topheader-nav {
       display: flex;
     }
-  }
-
-  .mobile-menu-toggle {
-    position: fixed;
-    left: 16px;
-    top: 14px;
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid @line;
-    color: @fg-ink;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    z-index: 15;
   }
 
   .editor-toolbar {

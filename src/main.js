@@ -157,6 +157,24 @@ function loadDemo() {
     })
 }
 
+function bindDrawer() {
+  var toggle = document.querySelector('.drawer-toggle')
+  var drawer = document.querySelector('.docs-drawer')
+  var backdrop = document.querySelector('.drawer-backdrop')
+
+  function setOpen(open) {
+    toggle.classList.toggle('is-open', open)
+    drawer.classList.toggle('is-open', open)
+    drawer.setAttribute('aria-hidden', open ? 'false' : 'true')
+    backdrop.classList.toggle('is-visible', open)
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!drawer.classList.contains('is-open'))
+  })
+  backdrop.addEventListener('click', function () { setOpen(false) })
+}
+
 function bindEvents() {
   var input = document.getElementById('input')
 
@@ -203,19 +221,13 @@ function bindEvents() {
       input.scrollTop = ratio * input.scrollHeight
     }
   })
-
-  var menuToggle = document.querySelector('.mobile-menu-toggle')
-  if (menuToggle) {
-    menuToggle.addEventListener('click', function () {
-      document.querySelector('.topheader').classList.toggle('menu-open')
-    })
-  }
 }
 
 // Init
 if (loadSavedContent()) {
   bindEvents()
   bindToolbar()
+  bindDrawer()
   updateOutput()
   initCodeTheme()
   initPageTheme()
@@ -225,6 +237,7 @@ if (loadSavedContent()) {
     .finally(function () {
       bindEvents()
       bindToolbar()
+      bindDrawer()
       updateOutput()
       initCodeTheme()
       initPageTheme()

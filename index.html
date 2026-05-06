@@ -17,7 +17,9 @@
 </head>
 <body>
 <header class="topheader">
-  <button class="mobile-menu-toggle" aria-label="展开菜单">&#9776;</button>
+  <button class="drawer-toggle" aria-label="打开草稿">
+    <span></span><span></span><span></span>
+  </button>
   <div class="brand">
     <span class="brand-mark" aria-hidden="true">§</span>
     <div class="brand-text">
@@ -36,6 +38,18 @@
     </label>
   </nav>
 </header>
+<div class="drawer-backdrop" aria-hidden="true"></div>
+<aside class="docs-drawer" aria-hidden="true">
+  <header class="drawer-header">
+    <span class="drawer-label">DRAFTS</span>
+    <span class="drawer-count">0</span>
+  </header>
+  <ul class="doc-list"></ul>
+  <button class="drawer-new" type="button">
+    <span class="new-sign">+</span>
+    <span class="new-label">新 建 草 稿</span>
+  </button>
+</aside>
 <div class="editor-toolbar">
   <button data-action="bold" aria-label="加粗"><strong>B</strong></button>
   <button data-action="italic" aria-label="斜体"><em>I</em></button>
